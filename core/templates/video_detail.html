@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}{{ video.title }} | Hotstar Clone{% endblock %}
+
+{% block extra_css %}
+<style>
+    .player-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 1000px;
+        margin: 0 auto;
+        animation: fade-in-up 0.5s ease-out;
+    }
+
+    .video-wrapper {
+        width: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: var(--surface-color);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        position: relative;
+    }
+
+    video {
+        width: 100%;
+        display: block;
+        object-fit: cover;
+    }
+
+    .video-details {
+        margin-top: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .video-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+
+    .video-meta {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .video-meta span {
+        padding: 4px 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .video-description {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        background-color: var(--surface-color);
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="player-container">
+        <div class="video-wrapper">
+            {% if video.video_file %}
+                <video controls autoplay>
+                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% else %}
+                <div style="padding: 100px; text-align:center;">Video file missing.</div>
+            {% endif %}
+        </div>
+        
+        <div class="video-details">
+            <h1 class="video-title">{{ video.title }}</h1>
+            
+            <div class="video-meta">
+                <span>{% if video.category %}{{ video.category.name }}{% else %}Uncategorized{% endif %}</span>
+                <p>Added {{ video.created_at|date:"F d, Y" }}</p>
+            </div>
+
+            <div class="video-description">
+                {{ video.description|default:"No description provided for this video." }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

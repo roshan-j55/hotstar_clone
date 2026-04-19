@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Hotstar Clone{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+    }
+
+    .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* Video Card Styles */
+    .video-card {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: var(--surface-color);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        animation: fade-in-up 0.6s ease-out forwards;
+        animation-fill-mode: both;
+    }
+
+    /* Add stagger effect to cards */
+    .video-card:nth-child(1) { animation-delay: 0.1s; }
+    .video-card:nth-child(2) { animation-delay: 0.2s; }
+    .video-card:nth-child(3) { animation-delay: 0.3s; }
+    .video-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .video-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 16px 24px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow);
+        z-index: 10;
+    }
+
+    .thumbnail-wrapper {
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .thumbnail-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .video-card:hover .thumbnail-wrapper img {
+        transform: scale(1.08); /* Zoom effect on hover */
+    }
+
+    /* Gradient overlay for text readability */
+    .thumbnail-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60%;
+        background: linear-gradient(180deg, transparent 0%, rgba(15,16,20,0.9) 100%);
+    }
+
+    .video-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 1rem;
+        z-index: 2;
+    }
+
+    .video-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-title">Latest & Trending</h2>
+    
+    <div class="video-grid">
+        {% for video in videos %}
+            <a href="{% url 'video_detail' video.id %}" class="video-card">
+                <div class="thumbnail-wrapper">
+                    {% if video.thumbnail %}
+                        <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}">
+                    {% else %}
+                        <!-- Fallback gray box if no image uploaded -->
+                        <div style="width:100%; height:100%; background:#333;"></div>
+                    {% endif %}
+                    <div class="thumbnail-overlay"></div>
+                    <div class="video-info">
+                        <h3 class="video-title">{{ video.title }}</h3>
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <p style="color: var(--text-secondary);">No videos available to watch right now. Add some from the admin panel!</p>
+        {% endfor %}
+    </div>
+{% endblock %}
