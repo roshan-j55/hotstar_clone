@@ -29,7 +29,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-4x9dxhvyca&=5558&od)g#a(vsls#nk_*-5=%47gke_@anxtoy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
